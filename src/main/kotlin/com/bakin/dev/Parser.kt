@@ -3,10 +3,10 @@ package com.bakin.dev
 import java.io.File
 import kotlin.text.StringBuilder
 
-class Parser(val file : File) {
+class Parser(private val file : File) {
 
     //just get a normal view code
-    fun parseCode(): List<String>{
+    private fun parseCode(): List<String>{
         val parsedProgram = mutableListOf<String>()
         val strings = file.readLines()
         for (string in strings.drop(2)) {
@@ -102,7 +102,10 @@ class Parser(val file : File) {
 
     //EXPEREMENTAL!!
     fun printRefactoredProgram() {
-        val program = refactorProgram(cleanCode(parseCode())).joinToString("")
-        println(program)
+        println(getRefactoredProgram())
+    }
+
+    fun getRefactoredProgram(): String {
+        return refactorProgram(cleanCode(parseCode())).joinToString("")
     }
 }
