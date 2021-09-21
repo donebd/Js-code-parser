@@ -14,7 +14,7 @@ class Parser(val file : File) {
             val newString = StringBuilder()
             for (char in str) {
                 if (char == '}') {
-                    newString.append('\n')
+                    if (newString.isNotEmpty()) newString.append('\n')
                     parsedProgram.add(newString.toString())
                     newString.clear()
                 }
@@ -25,6 +25,7 @@ class Parser(val file : File) {
                     newString.clear()
                 }
             }
+            if (newString.isNotEmpty()) parsedProgram.add(newString.toString())
         }
     return parsedProgram
     }
@@ -35,11 +36,12 @@ class Parser(val file : File) {
         val cleanProgram = mutableListOf<String>()
         for (string in strings) {
             when {
+
                 string.contains("grid(") -> skip = true
                 string.contains(")        );") -> skip = false
+                string.contains("var grid;") -> cleanProgram.add(string.replace("var grid;", ""))
                 !skip && !string.contains("var o = [];") &&
                         !string.contains("var pos;") &&
-                        !string.contains("var grid;") &&
                         !string.contains("grid = function(p) {") &&
                         !string.contains("o.push(p);") &&
                         !string.contains("pos = function(p) {") &&
@@ -47,7 +49,7 @@ class Parser(val file : File) {
                         string != "\n" && string != "};\n" -> cleanProgram.add(string)
             }
         }
-        cleanProgram.add("} ()")
+        cleanProgram.add(" ()")
         return cleanProgram
     }
 
@@ -59,9 +61,20 @@ class Parser(val file : File) {
         val refactoredProgram = mutableListOf<String>()
         for (string in strings) {
             when {
-                string.contains("var obj =") -> refactoredProgram.add("var res = ")
+                string.contains("Rez") -> {
+                    refactoredProgram.add(string.replace("Rez", "res"))
+                }
+                string.contains("obj =") -> {
+                    if (string.contains("obj = new Array()")) {
+                        refactoredProgram.add(string.replace("obj = new Array()", "res"))
+                    } else if (string.contains("obj = []")) {
+                        refactoredProgram.add(string.replace("obj = []", "res"))
+                    } else {
+                        refactoredProgram.add(string.replace("obj", "res"))
+                    }
+                }
                 string.contains("obj.push(") && !union -> {
-                    refactoredProgram.add(string.removePrefix("obj.push("))
+                    refactoredProgram.add("res = " + string.removePrefix("obj.push("))
                 }
                 string.contains("}));") && !union -> {
                     refactoredProgram.add("});\n")
@@ -70,14 +83,16 @@ class Parser(val file : File) {
                 string.contains("obj.push(") && union -> {
                     refactoredProgram.add("res = union(res, ${string.removePrefix("obj.push(")}")
                 }
-                string.contains("}));") && union -> {
-                    refactoredProgram.add(string)
-                }
                 string.contains("return o;") -> refactoredProgram.add("return res;\n")
                 else -> refactoredProgram.add(string)
             }
         }
         return refactoredProgram
+    }
+
+    fun printSourceCode() {
+        val program = parseCode().joinToString("")
+        println(program)
     }
 
     fun printProgram() {
