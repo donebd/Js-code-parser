@@ -1,3 +1,14 @@
-"var gMemFs = [];
+function main()  {
+var xA = 1, yA = 2, zA = 3, xB = 16, yB = 0, zB = 2, r1 = 4, r2 = 2, P1 = 32, P2 = 128;
+var R1, R2, res;
+R1 = ( Math.log2 ( P1 ) + 1 ) / 2;
+R2 = ( Math.log2 ( P2 ) + 1 ) / 2;
+res = CSG.sphere({
+center: [xA,yA,zA],radius: r1,resolution: pow(2,R1)
+});
+res = union(res, CSG.sphere({
+center: [xB,yB,zB],radius: r2,resolution: pow(2,R2)
+}));
 
-function main()  {var o = [];var pos;var xA = 1, yA = 2, zA = 3, xB = 16, yB = 0, zB = 2, r1 = 4, r2 = 2, P1 = 32, P2 = 128;var R1, R2, obj = new Array();R1 = ( Math.log2 ( P1 ) + 1 ) / 2;R2 = ( Math.log2 ( P2 ) + 1 ) / 2;obj.push(CSG.sphere({center: [xA,yA,zA],radius: r1,resolution: pow(2,R1)}));obj.push(CSG.sphere({center: [xB,yB,zB],radius: r2,resolution: pow(2,R2)}));var grid;        grid = function(p) {o.push(p);};        grid(            union(                cube({size: [40,0.05,0.05], center: [false,true,true]}).setColor(1,0,0),                cube({size: [40,0.05,0.05], center: [false,true,true]}).setColor(1,0,0).rotateY(-90),                cube({size: [40,0.05,0.05], center: [false,true,true]}).setColor(1,0,0).rotateZ(90)            )        );                    pos = function(p) {o.push(p);};                    pos(union(obj));                    return o;}"
+return res;
+} ()

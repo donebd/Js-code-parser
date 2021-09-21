@@ -1,3 +1,21 @@
-"var gMemFs = [];
-
-function main()  {var o = [];var pos;var rl=2, b1=50, b2=14;alpha = abs(b1 - b2);r = rl*sin(alpha);r = round(r*1000)/1000;for (i = 0; i<4; i++){if (i == 0){Rez = CSG.sphere({center: [0, 0, 0],radius: r,resolution: 32})}else { Rez = union (Rez, CSG.sphere({center: [i*r*1.5, 0, 0],radius: r,resolution: 32}))}}var grid;        grid = function(p) {o.push(p);};        grid(            union(                cube({size: [40,0.05,0.05], center: [false,true,true]}).setColor(1,0,0),                cube({size: [40,0.05,0.05], center: [false,true,true]}).setColor(1,0,0).rotateY(-90),                cube({size: [40,0.05,0.05], center: [false,true,true]}).setColor(1,0,0).rotateZ(90)            )        );                    pos = function(p) {o.push(p);};                    pos(union(Rez));                    return o;}"
+function main()  {
+var rl=2, b1=50, b2=14;
+alpha = abs(b1 - b2);
+r = rl*sin(alpha);
+r = round(r*1000)/1000;
+for (i = 0;
+ i<4;
+ i++){
+if (i == 0){
+res = CSG.sphere({
+center: [0, 0, 0],radius: r,resolution: 32
+})
+}else {
+ res = union (res, CSG.sphere({
+center: [i*r*1.5, 0, 0],radius: r,resolution: 32
+}))
+}
+}
+                    pos(union(res));
+return res;
+} ()
