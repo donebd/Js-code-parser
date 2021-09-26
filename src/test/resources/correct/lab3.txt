@@ -1,0 +1,79 @@
+function main()  {
+var px0 = 30, py0 = 0, pxk = 43, pyk = 4;
+var change, ii, ji, is, js, H,  W, m, F, res, result;
+W = pxk - px0;
+H = pyk - py0;
+ii = 0;
+ji = 0;
+is = 0;
+js = 0;
+m = max (abs(W), abs(H));
+res = new Array(2);
+for(var n=0;
+ n <= m+1;
+ n++){
+res[n] = new Array(2);
+}F = new Array(m+1);
+res [0][0] = px0;
+res [1][0] = py0;
+if(W === 0){
+ii = 1;
+ji = 0;
+is = sign(H);
+js = sign(W);
+change = W;
+ W = H;
+H = change;
+}else{
+if(abs(H/W) <= 1){
+ii = 0;
+ji = 1;
+is = sign(W);
+js = sign(H);
+}else{
+ii = 1;
+ji = 0;
+is = sign(H);
+js = sign(W);
+change = W;
+ W = H;
+H = change;
+}
+}W = abs(W);
+H = abs(H);
+F[0] = 2*H-W;
+for(var k = 0;
+ k <= m;
+ k++){
+res[ii][k+1] = res[ii][k]+is;
+res[ji][k+1] = res[ji][k];
+if(js>=0){
+if (F[k]<0) {
+F[k+1]=F[k]+2*H
+}else {
+F[k+1]=F[k]-2*(W-H);
+res[ji][k+1]=res[ji][k]+js;
+}
+}else{
+if(F[k]<0){
+F[k+1]=F[k]+2*H;
+}else{
+F[k+1]=F[k]-2*(W-H);
+res[ji][k+1]=res[ji][k]+js;
+}
+}
+}for (var k = 0;
+ k <= m;
+ k++){
+if (k == 0){
+result = CAG.rectangle({
+ center: [res[0][0]+0.5, res[1][0]+0.5, 0], radius: 0.6
+});
+}else{
+result = union(result, CAG.rectangle({
+ center: [res[0][k]+0.5, res[1][k]+0.5, 0], radius: 0.6
+}));
+}
+}
+return result;
+} ()

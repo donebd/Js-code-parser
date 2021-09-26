@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class Tests {
 
     private fun String.toSpecialFormat() : String{
-        return this.replace("\n", "").replace("\r", "");
+        return this.replace("\n", "").replace("\r", "")
     }
 
     @Test
@@ -50,4 +50,11 @@ class Tests {
             File("src/test/resources/correct/lab2_6.txt").readText().toSpecialFormat())
     }
 
+    @Test
+    fun testRefactoredLab3() {
+        val file = File("src/test/resources/lab3.txt")
+        val parse = Parser(file)
+        assertEquals(parse.getRefactoredProgram().toSpecialFormat(),
+            File("src/test/resources/correct/lab3.txt").readText().toSpecialFormat())
+    }
 }
