@@ -3,10 +3,10 @@ package com.bakin.dev
 import java.io.File
 import kotlin.text.StringBuilder
 
-class Parser(private val file : File) {
+class Parser(private val file: File) {
 
     //just get a normal view code
-    private fun parseCode(): List<String>{
+    private fun parseCode(): List<String> {
         val parsedProgram = mutableListOf<String>()
         val strings = file.readLines()
         for (string in strings.drop(2)) {
@@ -27,11 +27,11 @@ class Parser(private val file : File) {
             }
             if (newString.isNotEmpty()) parsedProgram.add(newString.toString())
         }
-    return parsedProgram
+        return parsedProgram
     }
 
     //remove unusable code
-    private fun cleanCode(strings: List<String>) : List<String> {
+    private fun cleanCode(strings: List<String>): List<String> {
         var skip = false
         val cleanProgram = mutableListOf<String>()
         for (string in strings) {
@@ -58,32 +58,35 @@ class Parser(private val file : File) {
     //
     private fun refactorProgram(strings: List<String>): List<String> {
         var union = false // for many objects
+        var isPushing = false
         val refactoredProgram = mutableListOf<String>()
         for (string in strings) {
             when {
                 string.contains("Rez") -> {
-                    refactoredProgram.add(string.replace("Rez", "res"))
+                    refactoredProgram.add(string.replace("Rez", "result"))
                 }
-                string.contains("obj =") -> {
+                string.contains("obj") && !string.contains("obj.push(") -> {
                     if (string.contains("obj = new Array()")) {
-                        refactoredProgram.add(string.replace("obj = new Array()", "res"))
+                        refactoredProgram.add(string.replace("obj = new Array()", "result"))
                     } else if (string.contains("obj = []")) {
-                        refactoredProgram.add(string.replace("obj = []", "res"))
+                        refactoredProgram.add(string.replace("obj = []", "result"))
                     } else {
-                        refactoredProgram.add(string.replace("obj", "res"))
+                        refactoredProgram.add(string.replace("obj", "result"))
                     }
                 }
                 string.contains("obj.push(") && !union -> {
-                    refactoredProgram.add("res = " + string.removePrefix("obj.push("))
+                    refactoredProgram.add("result = " + string.removePrefix("obj.push("))
+                    isPushing = true
                 }
-                string.contains("}));") && !union -> {
+                string.contains("}));") && !union && isPushing -> {
                     refactoredProgram.add("});\n")
+                    isPushing = false
                     union = true
                 }
                 string.contains("obj.push(") && union -> {
-                    refactoredProgram.add("res = union(res, ${string.removePrefix("obj.push(")}")
+                    refactoredProgram.add("result = union(result, ${string.removePrefix("obj.push(")}")
                 }
-                string.contains("return o;") -> refactoredProgram.add("return res;\n")
+                string.contains("return o;") -> refactoredProgram.add("return result;\n")
                 else -> refactoredProgram.add(string)
             }
         }
