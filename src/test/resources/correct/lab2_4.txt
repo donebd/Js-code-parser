@@ -11,7 +11,7 @@ center: [2.0,7,3.5], radius: [2.0,5,3.5]
 start: [0.0,7,7], end: [4.0,7,7], radius: 5
 }),cylinder2 = CSG.cylinder({
 start: [0.0,7,7], end: [4.0,7,7], radius: 2.0
-}), res = cube1.union([cube4, cylinder1]).subtract([cube2,cylinder2, cube3]);
+}), result = cube1.union([cube4, cylinder1]).subtract([cube2,cylinder2, cube3]);
 
-return res;
+return result;
 } ()

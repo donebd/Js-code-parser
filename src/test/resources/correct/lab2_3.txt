@@ -1,15 +1,15 @@
 function main()  {
 var xA = 2.7, yA = 2.1, zA = 3.6, r1 = 1.6, r2 = 1.8, r3 = 2.2, h2 = 3.1, h3 = 2.7;
-var res;
-res = CSG.cylinder({
+var result;
+result = CSG.cylinder({
 start: [xA,yA,0],end: [xA,yA,zA],radius: r1
 });
-res = union(res, CSG.cylinder({
+result = union(result, CSG.cylinder({
 start: [xA,yA,zA],end: [xA,yA,zA+h2],radiusStart: r2,radiusEnd: 0
 }));
-res = union(res, CSG.cylinder({
+result = union(result, CSG.cylinder({
 start: [xA,yA,zA+h2/2],end: [xA,yA,zA+h2/2+h3],radiusStart: r2/2,radiusEnd: r3
 }));
 
-return res;
+return result;
 } ()

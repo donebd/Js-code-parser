@@ -1,14 +1,14 @@
 function main()  {
 var xA = 1, yA = 2, zA = 3, xB = 16, yB = 0, zB = 2, r1 = 4, r2 = 2, P1 = 32, P2 = 128;
-var R1, R2, res;
+var R1, R2, result;
 R1 = ( Math.log2 ( P1 ) + 1 ) / 2;
 R2 = ( Math.log2 ( P2 ) + 1 ) / 2;
-res = CSG.sphere({
+result = CSG.sphere({
 center: [xA,yA,zA],radius: r1,resolution: pow(2,R1)
 });
-res = union(res, CSG.sphere({
+result = union(result, CSG.sphere({
 center: [xB,yB,zB],radius: r2,resolution: pow(2,R2)
 }));
 
-return res;
+return result;
 } ()

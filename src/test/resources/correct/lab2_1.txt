@@ -1,15 +1,15 @@
 function main()  {
 var xA = 5.6, yA = 2.7, zA = 1.6, xB = 5.4, yB = 3.7, zB = 4.3, l1 = 4.5, w1 = 4.8, l2 = 2.3, w2 = 1.9, h2 = 2.9, l3 = 2.0, w3 = 1.4;
-var res;
-res = CSG.cube({
+var result;
+result = CSG.cube({
 center: [xA,yA,zA],radius: [l1/2,w1/2,zA]
 });
-res = union(res, CSG.cube({
+result = union(result, CSG.cube({
 corner1: [xB,yB,zB],corner2: [xB+l3, yB-w3, zA*2]
 }));
-res = union(res, CSG.cube({
+result = union(result, CSG.cube({
 corner1: [xA+l1/2,yA+w1/2,0],corner2: [xA+l1/2+l2,yA+w1/2+w2,h2]
 }));
 
-return res;
+return result;
 } ()
